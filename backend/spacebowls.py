@@ -26,15 +26,14 @@ async def get_name(request):
         (Request): A request object in json format which includes the entire
         list of players.
     """
-    player_args = request.json['name']
-    if len(list_of_players) > 8:
-        return json("Max players")
+    player_name = request.json["name"]
 
-    for player_name in player_args:
-        if player_name not in list_of_players:
-            list_of_players.append(player_name)
-        else:
-            return json("ERROR")
+    if len(list_of_players) > 7:
+        return json("Too many players, try later")
+    elif player_name not in list_of_players:
+        list_of_players.append(player_name)
+    else:
+        return json("ERROR")
 
     return json({"players": list_of_players})
 
