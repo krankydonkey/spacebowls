@@ -34,12 +34,12 @@ async def get_name(request):
     elif player_name not in list_of_players:
         list_of_players.append(player_name)
     else:
-        return json("Please enter another name.")
+        return json(-1)
 
     return json({"players": list_of_players})
 
 
-@app.route("/get_players", methods=["POST"])
+@app.route("/get_players")
 async def get_players(request):
     """
     Returns the list of players currently in the game.

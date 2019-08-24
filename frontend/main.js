@@ -35,6 +35,6 @@ async function goToMain() {
         await delay(500);
         let response = await fetch("/get_players");
         const list = await response.json();
-        console.log(list);
+        //create_players(list);
     }
 }
