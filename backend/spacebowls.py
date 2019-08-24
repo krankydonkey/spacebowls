@@ -13,7 +13,7 @@ app.static("/static", "../frontend/dist")
 app.static("/", "../frontend/dist/index.html")
 
 
-@app.route("/test_players", methods=["POST"])
+@app.route("/name", methods=["POST"])
 async def get_name(request):
     """
     Adds player to the list of players and ensures that the player name is
@@ -39,7 +39,7 @@ async def get_name(request):
     return json({"players": list_of_players})
 
 
-@app.route("/", methods=["POST"])
+@app.route("/get_players", methods=["POST"])
 async def get_players(request):
     """
     Returns the list of players currently in the game.
