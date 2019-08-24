@@ -3,9 +3,10 @@ import {create_players, move} from 'gravity';
 const button = document.getElementById("login");
 const input = document.getElementById("username");
 
-button.addEventListener("click", function(event) {
+button.addEventListener("click", async function(event) {
     console.log(input.value);
     // put code here
+    let response = await fetch("http://localhost:8000/test_players", { method: "POST", body: { name: input.value } });
     goToMain();
 })
 
