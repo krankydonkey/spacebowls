@@ -7,9 +7,11 @@ input.addEventListener("input", function(event) {
   button.disabled = input.value ? false : true;
 })
 
-button.addEventListener("click", function(event) {
-    console.log(input.value);
+button.addEventListener("click", async function(event) {
     // put code here
+    let response = await fetch("/test_players", { method: "POST", body: JSON.stringify({ name: input.value }) });
+    const data = await response.json();
+    console.log(data);
     goToMain();
 })
 

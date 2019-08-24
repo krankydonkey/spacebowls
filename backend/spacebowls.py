@@ -12,7 +12,7 @@ list_of_players = []
 app.static("/static", "../frontend/dist")
 app.static("/", "../frontend/dist/index.html")
 
-@app.route("/test_players")
+@app.route("/test_players", methods=["POST"])
 async def get_name(request):
     """
     Adds player to the list of players and ensures that the player name is
@@ -26,7 +26,7 @@ async def get_name(request):
         (Request): A request object in json format which includes the entire
         list of players.
     """
-    player_args = request.args['name']
+    player_args = request.json['name']
     if len(list_of_players) > 8:
         return json("Max players")
 
