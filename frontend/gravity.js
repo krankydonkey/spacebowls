@@ -1,4 +1,5 @@
 import  { delay } from "./util";
+import { id } from "./main";
 
 const length = 400;
 const initial_radius = 100;
@@ -6,7 +7,7 @@ export const radius = 10;
 const coeff = 10000;
 const repulsion = 100;
 const interval = 0.01;
-const cycles = 5000;
+const cycles = 1000;
 const time = 2;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
@@ -22,11 +23,15 @@ function clear_board() {
     ctx.clearRect(0, 0, length, length);
 }
 
-function draw(bowl) {
+function draw(player) {
+    const bowl = bowls[player];
     let x = bowl.x;
     let y = bowl.y;
+    ctx.beginPath();
     ctx.moveTo(x+radius, y);
     ctx.arc(x, y, radius, 0, 2*Math.PI);
+    ctx.fillStyle = (player == id) ? "green" : "red";
+    ctx.fill();
 }
 
 export function create_players(names) {
@@ -34,7 +39,7 @@ export function create_players(names) {
     bowls = [];
     players = [];
     clear_board();
-    ctx.beginPath();
+    // ctx.beginPath();
     for (let player = 0; player < num; player++)
     {
         let angle = 2*Math.PI*player/(num);
@@ -53,9 +58,8 @@ export function create_players(names) {
         };
         bowls.push(bowl);
         players.push(player);
-        draw(bowl);
+        draw(player);
     }
-    ctx.fill();
 }
 
 
@@ -157,7 +161,7 @@ function gravity() {
 function iterate() {
     gravity();
     clear_board();
-    ctx.beginPath();
+    // ctx.beginPath();
     for (let i = 0; i < num; i++)
     {
         let player = players[i];
@@ -172,27 +176,27 @@ function iterate() {
             continue;
         } else
         {
-            draw(bowl);
+            draw(player);
         }
         // Velocity calculations v = u + ft
         bowl.vx += bowl.fx*interval;
         bowl.vy += bowl.fy*interval;
     }
-    ctx.fill();
 }
 
 export async function move(vectors) {
+  console.log(vectors);
     for (let i = 0; i < num; i++)
     {
         let player = players[i];
         let bowl = bowls[player];
-        let vector = vectors[player]
-        bowl.vx += vector.vx;
-        bowl.vy += vector.vy;
+        let [vx, vy] = vectors[player]
+        bowl.vx += vx;
+        bowl.vy += vy;
     }
     for (let cycle = 0; cycle < cycles; cycle++)
     {
         iterate();
-        await delay(time *1000 / cycles);
+        await delay(time * 1000 / cycles);
     }
 }
