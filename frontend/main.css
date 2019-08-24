@@ -61,8 +61,11 @@ input {
 #main-page {
   display: none;
   width: 100%;
-  grid-template-areas: "canvas leaderboard" "blank go";
+  grid-template-areas: "canvas leaderboard" "go leaderboard";
+  grid-template-rows: 1fr auto;
+  grid-template-columns: 1fr auto;
   grid-gap: 1rem;
+  justify-items: center;
 }
 
 #move {
