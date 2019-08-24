@@ -77,38 +77,38 @@ function gravity() {
             other.fy -= fy;
         }
     }
+}
 
-    function iterate() {
-        gravity();
-        for (let player = 0; player < num; player++)
+function iterate() {
+    gravity();
+    for (let player = 0; player < num; player++)
+    {
+    let bowl = bowls[player];
+        // Location calculations s = ut + 1/2 at^2
+        bowl.x += bowl.vx*interval + 0.5*bowl.fx*interval*interval;
+        bowl.y += bowl.vy*interval + 0.5*bowl.fy*interval*interval;
+        // Out of bounds calculations
+        if (out_of_bounds(bowl))
         {
-            let bowl = bowls[player];
-            // Location calculations s = ut + 1/2 at^2
-            bowl.x += bowl.vx*interval + 0.5*bowl.fx*interval*interval;
-            bowl.y += bowl.vy*interval + 0.5*bowl.fy*interval*interval;
-            // Out of bounds calculations
-            if (out_of_bounds(bowl))
-            {
-                gravity();
-                continue;
-            }
-            // Velocity calculations v = u + ft
-            bowl.vx += bowl.fx*interval;
-            bowl.vy += bowl.fy*interval;
+            gravity();
+            continue;
         }
+        // Velocity calculations v = u + ft
+        bowl.vx += bowl.fx*interval;
+        bowl.vy += bowl.fy*interval;
     }
+}
 
-    function move(vectors) {
-        for (let player = 0; player < num; player++)
-        {
-            let bowl = bowls[player];
-            let vector = vectors[player]
-            bowl.vx += vector.vx;
-            bowl.vy += vector.vy;
-        }
-        for (let cycle = 0; cycle < cycles; cycle++)
-        {
-            iterate();
-        }
+function move(vectors) {
+    for (let player = 0; player < num; player++)
+    {
+        let bowl = bowls[player];
+        let vector = vectors[player]
+        bowl.vx += vector.vx;
+        bowl.vy += vector.vy;
+    }
+    for (let cycle = 0; cycle < cycles; cycle++)
+    {
+        iterate();
     }
 }
