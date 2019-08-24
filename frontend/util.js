@@ -1,6 +1,6 @@
 
 export function delay(time) {
-  return new Promise(function(resolve) {
-    setTimeout(resolve, resolve);
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, time);
   });
 }
