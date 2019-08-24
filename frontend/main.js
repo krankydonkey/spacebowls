@@ -1,6 +1,12 @@
 const button = document.getElementById("login");
 const input = document.getElementById("username");
 
+button.disabled = true;
+
+input.addEventListener("input", function(event) {
+  button.disabled = input.value ? false : true;
+})
+
 button.addEventListener("click", function(event) {
     console.log(input.value);
     // put code here
