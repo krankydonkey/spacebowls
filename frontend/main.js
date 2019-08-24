@@ -3,10 +3,17 @@ import {create_players, move} from 'gravity';
 const button = document.getElementById("login");
 const input = document.getElementById("username");
 
+button.disabled = true;
+
+input.addEventListener("input", function(event) {
+  button.disabled = input.value ? false : true;
+})
+
 button.addEventListener("click", async function(event) {
-    console.log(input.value);
     // put code here
-    let response = await fetch("http://localhost:8000/test_players", { method: "POST", body: { name: input.value } });
+    let response = await fetch("/test_players", { method: "POST", body: JSON.stringify({ name: input.value }) });
+    const data = await response.json();
+    console.log(data);
     goToMain();
 })
 
@@ -19,4 +26,3 @@ function goToMain() {
     document.getElementById("login-page").style.display = "none";
     document.getElementById("main-page").style.display = "flex";
 }
-
