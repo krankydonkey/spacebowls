@@ -1,4 +1,4 @@
-import {create_players, move, bowls, radius } from './gravity';
+import { draw_all, draw_line, clear_board, create_players, move, bowls, radius } from './gravity';
 import { delay } from "./util";
 
 const button = document.getElementById("login");
@@ -85,6 +85,13 @@ async function goToRoundMove(players){
         if ((x - og_vx) * (x - og_vx) + (y - og_vy) * (y - og_vy) < radius * radius) {
           document.removeEventListener("mousedown", mouseDown);
 
+          function mouseMove(event) {
+            const { x: move_x, y: move_y } = getCoordsInCanvas(event.clientX, event.clientY);
+            clear_board();
+            draw_all();
+            draw_line(x, y, move_x, move_y);
+          }
+
           function mouseUp(event) {
             new_vx = getCoordsInCanvas(event.clientX, event.clientY).x;
             new_vy = getCoordsInCanvas(event.clientX, event.clientY).y;
@@ -92,10 +99,12 @@ async function goToRoundMove(players){
             console.log({ new_vx, new_vy });
 
             document.removeEventListener("mouseup", mouseUp);
+            document.removeEventListener("mousemove", mouseMove);
             resolve();
           }
 
           document.addEventListener("mouseup", mouseUp);
+          document.addEventListener("mousemove", mouseMove);
         }
       }
 

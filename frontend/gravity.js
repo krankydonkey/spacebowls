@@ -19,19 +19,37 @@ let players = [];
 canvas.width = length;
 canvas.height = length;
 
-function clear_board() {
+export function clear_board() {
     ctx.clearRect(0, 0, length, length);
+}
+
+export function draw_line(x1, y1, x2, y2) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
 }
 
 function draw(player) {
     const bowl = bowls[player];
     let x = bowl.x;
     let y = bowl.y;
+    ctx.fillStyle = (player == id) ? "green" : "red";
     ctx.beginPath();
     ctx.moveTo(x+radius, y);
     ctx.arc(x, y, radius, 0, 2*Math.PI);
-    ctx.fillStyle = (player == id) ? "green" : "red";
     ctx.fill();
+    ctx.font = "16px Courier New";
+    ctx.fillText(bowls[player].id, x + radius, y - radius);
+}
+
+export function draw_all() {
+  for (let i = 0; i < num; ++i) {
+    draw(players[i]);
+  }
+  if (bowls[id].in) {
+    draw(id);
+  }
 }
 
 export function create_players(names) {
@@ -58,8 +76,9 @@ export function create_players(names) {
         };
         bowls.push(bowl);
         players.push(player);
-        draw(player);
     }
+
+  draw_all();
 }
 
 
@@ -174,14 +193,13 @@ function iterate() {
         {
             gravity();
             continue;
-        } else
-        {
-            draw(player);
         }
         // Velocity calculations v = u + ft
         bowl.vx += bowl.fx*interval;
         bowl.vy += bowl.fy*interval;
     }
+
+  draw_all()
 }
 
 export async function move(vectors) {
