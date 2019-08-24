@@ -46,3 +46,13 @@ body {
 input {
     margin: 0.5rem;
 }
+
+#login-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#main-page {
+    display: none;
+}
