@@ -7,7 +7,9 @@ from sanic.response import json
 
 app = Sanic(__name__)
 
-list_of_players = ["cool", "story", "bro", "needs", "alot", "more", "dragons"]
+
+list_of_players = []
+players = {}
 
 app.static("/static", "../frontend/dist")
 app.static("/", "../frontend/dist/index.html")
@@ -27,16 +29,18 @@ async def get_name(request):
         (Request): A request object in json format which includes the entire
         list of players.
     """
-    player_name = request.json["name"]
+    player_name = request.args["name"]
 
     if len(list_of_players) > 7:
-        return json("Too many players, try later.")
+        # 8 players reached, the game is full
+        return json(0)
     elif player_name not in list_of_players:
+        players[player_name] = len(list_of_players)
         list_of_players.append(player_name)
+        return json({"players": players})
     else:
+        # the username already exists
         return json(-1)
-
-    return json({"players": list_of_players})
 
 
 @app.route("/get_players")
@@ -54,7 +58,28 @@ async def get_players(request):
     """
     return json({"players": list_of_players})
 
-# TODO: clear array method
+
+@app.route("/clear_players")
+async def clear_players(request):
+    global list_of_players
+    list_of_players = []
+
+
+vectors = []
+
+
+@app.route("/vector", methods=["POST"])
+async def add_to_vectors(request):
+    global vectors
+
+    vector = request.json["name"]
+    vectors.append(vector)
+
+    if len(vectors) == 8:
+        json_vectors = json(vectors)
+        vectors = []
+        return json_vectors
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000)
