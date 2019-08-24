@@ -13,6 +13,13 @@ players = {}
 app.static("/static", "../frontend/dist")
 app.static("/", "../frontend/dist/index.html")
 
+@app.route("/reset")
+async def kill_it_all(request):
+    players = {}
+    list_of_players = []
+    vectors = [None] * 8
+    return json(None)
+
 
 @app.route("/name", methods=["POST"])
 async def get_name(request):

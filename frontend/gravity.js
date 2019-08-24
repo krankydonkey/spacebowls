@@ -4,13 +4,14 @@ import { id } from "./main";
 const length = 400;
 const initial_radius = 100;
 export const radius = 10;
-const coeff = 10000;
+const coeff = 40000;
 const repulsion = 100;
 const interval = 0.01;
 const cycles = 1000;
 const time = 2;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+    ctx.font = "16px Courier New";
 
 let num;
 export let bowls = [];
@@ -31,15 +32,17 @@ export function draw_line(x1, y1, x2, y2) {
 }
 
 function draw(player) {
+    ctx.fillStyle = (player == id) ? "green" : "red";
+
     const bowl = bowls[player];
+
     let x = bowl.x;
     let y = bowl.y;
-    ctx.fillStyle = (player == id) ? "green" : "red";
     ctx.beginPath();
     ctx.moveTo(x+radius, y);
     ctx.arc(x, y, radius, 0, 2*Math.PI);
     ctx.fill();
-    ctx.font = "16px Courier New";
+
     ctx.fillText(bowls[player].id, x + radius, y - radius);
 }
 
@@ -92,12 +95,12 @@ function clear() {
     }
 }
 
-function out_of_bounds(player) {
-    let bowl = bowls[player];
+function out_of_bounds(i) {
+    let bowl = bowls[players[i]];
     if (bowl.x + radius < 0 || bowl.x - radius > length
         || bowl.y + radius < 0 || bowl.y - radius > length)
     {
-        players.splice(player, 1);
+        players.splice(i, 1);
         bowl.in = false;
         num--;
         return true;
@@ -181,7 +184,7 @@ function iterate() {
     gravity();
     clear_board();
     // ctx.beginPath();
-    for (let i = 0; i < num; i++)
+    for (let i = num - 1; i >= 0; i--)
     {
         let player = players[i];
         let bowl = bowls[player];
@@ -189,7 +192,7 @@ function iterate() {
         bowl.x += bowl.vx*interval + 0.5*bowl.fx*interval*interval;
         bowl.y += bowl.vy*interval + 0.5*bowl.fy*interval*interval;
         // Out of bounds calculations
-        if (out_of_bounds(player))
+        if (out_of_bounds(i))
         {
             gravity();
             continue;
