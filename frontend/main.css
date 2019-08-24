@@ -60,7 +60,8 @@ input {
 
 #main-page {
     display: none;
-    width: 60%;
+    width: calc(70vh - 2rem);
+    max-width: calc(100% - 2rem);
     height: max-content;
     position: relative;
     overflow: visible;
