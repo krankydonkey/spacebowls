@@ -24,6 +24,7 @@ function draw(bowl) {
 
 export function create_players(players) {
     num = players.length;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     for (let player = 0; player < num; player++)
     {
