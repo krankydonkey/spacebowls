@@ -2,7 +2,7 @@ import  { delay } from "./util";
 
 const length = 400;
 const initial_radius = 100;
-const radius = 10;
+export const radius = 10;
 const coeff = 10000;
 const repulsion = 100;
 const interval = 0.01;

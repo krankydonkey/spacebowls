@@ -78,18 +78,15 @@ async def add_to_vectors(request):
     global vectors
 
     vector = request.json["name"]
-    index, vx, vy = vector
-    vectors[index] = (vx, vy)
+    vectors[vector["id"]] = (vector["vx"], vector["vy"])
 
-    for item in vectors:
-        if item is None:
-            return
-    return vectors
+    return json({ "vectors": vectors })
 
-    # if len(vectors) == 8:
-    #     json_vectors = json(vectors)
-    #     vectors = []
-    #     return json_vectors
+@app.route("/get_vectors")
+async def see_vectors(request):
+    global vectors
+
+    return json({ "vectors": vectors })
 
 
 if __name__ == '__main__':
