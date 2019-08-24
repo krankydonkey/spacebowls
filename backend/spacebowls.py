@@ -31,15 +31,15 @@ async def get_name(request):
     player_name = request.json["name"]
 
     if len(list_of_players) > 7:
+        # 8 players reached, the game is full
         return json(0)
     elif player_name not in list_of_players:
         players[player_name] = len(list_of_players)
         list_of_players.append(player_name)
         return json({"players": players})
     else:
+        # the username already exists
         return json(-1)
-
-    
 
 
 @app.route("/get_players")
@@ -57,7 +57,34 @@ async def get_players(request):
     """
     return json({"players": list_of_players})
 
-# TODO: clear array method
+
+@app.route("/clear_players")
+async def clear_players(request):
+    """
+    Clears the array of the list of players.
+
+    Parameter:
+        request (Request): The request made by the client.
+    """
+    global list_of_players
+    list_of_players = []
+
+
+vectors = []
+
+
+@app.route("/vector", methods=["POST"])
+async def add_to_vectors(request):
+    global vectors
+
+    vector = request.json["name"]
+    vectors.append(vector)
+
+    if len(vectors) == 8:
+        json_vectors = json(vectors)
+        vectors = []
+        return json_vectors
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000)

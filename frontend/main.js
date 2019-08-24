@@ -6,7 +6,7 @@ const input = document.getElementById("username");
 let id;
 let alt_id;
 
-button.disabled = true;
+button.disabled = input.value ? false : true;
 
 input.addEventListener("input", function(event) {
   button.disabled = input.value ? false : true;
