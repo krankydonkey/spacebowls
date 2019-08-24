@@ -25,4 +25,18 @@ function goToLogin() {
 function goToMain() {
     document.getElementById("login-page").style.display = "none";
     document.getElementById("main-page").style.display = "flex";
+/*
+    while(1){
+        await delay(500);
+        let response = await fetch("/get_players");
+        const list = await response.json();
+        console.log(list);
+    }
+*/
+
+
+    //create_players(["neil", "damian"]);
+    console.log("?");
+    move([{vx:0, vy:0},{vx:0, vy:0}]);
+
 }
