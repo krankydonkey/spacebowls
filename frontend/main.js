@@ -118,8 +118,8 @@ async function goToRoundMove(players){
       const { height, width } = canvas.getBoundingClientRect();
       const maxDraw = Math.sqrt(height * height + width * width);
 
-      vx = 20 / maxDraw * vx_unscaled;
-      vy = 20 / maxDraw * vy_unscaled;
+      vx = 50 / maxDraw * vx_unscaled;
+      vy = 50 / maxDraw * vy_unscaled;
     } else {
       vx = 0;
       vy = 0;
