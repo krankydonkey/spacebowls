@@ -29,7 +29,7 @@ async def get_name(request):
         (Request): A request object in json format which includes the entire
         list of players.
     """
-    player_name = request.args["name"]
+    player_name = request.json["name"]
 
     if len(list_of_players) > 7:
         # 8 players reached, the game is full
@@ -61,6 +61,12 @@ async def get_players(request):
 
 @app.route("/clear_players")
 async def clear_players(request):
+    """
+    Clears the array of the list of players.
+
+    Parameter:
+        request (Request): The request made by the client.
+    """
     global list_of_players
     list_of_players = []
 
