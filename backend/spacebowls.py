@@ -9,6 +9,8 @@ app = Sanic(__name__)
 
 list_of_players = []
 
+app.static("/static", "../frontend/dist")
+app.static("/", "../frontend/dist/index.html")
 
 @app.route("/test_players")
 async def get_name(request):

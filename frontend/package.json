@@ -7,7 +7,7 @@
     "parcel-bundler": "^1.12.3"
   },
   "scripts": {
-    "serve": "parcel index.html"
+    "serve": "parcel index.html --public-url static"
   },
   "browserslist": [
     "last 1 Chrome version"
