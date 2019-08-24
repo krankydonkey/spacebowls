@@ -1,13 +1,13 @@
 import  { delay } from "./util";
 
-const width = 400;
-const height = 400;
+const length = 400;
 const initial_radius = 100;
 const radius = 10;
 const coeff = 50000;
 const repulsion = 10;
-const interval = 0.01;
-const cycles = 300;
+const interval = 0.0005;
+const cycles = 5000;
+const time = 2;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -15,13 +15,16 @@ let num;
 let bowls = [];
 let players = [];
 
-canvas.width = width;
-canvas.height = height;
+canvas.width = length;
+canvas.height = length;
+
+function clear_board() {
+    ctx.clearRect(0, 0, length, length);
+}
 
 function draw(bowl) {
     let x = bowl.x;
     let y = bowl.y;
-    //console.log({ id: bowl.id, x, y });
     ctx.moveTo(x+radius, y);
     ctx.arc(x, y, radius, 0, 2*Math.PI);
 }
@@ -30,13 +33,13 @@ export function create_players(names) {
     num = names.length;
     bowls = [];
     players = [];
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    clear_board();
     ctx.beginPath();
     for (let player = 0; player < num; player++)
     {
         let angle = 2*Math.PI*player/(num);
-        let x = width/2 + initial_radius*Math.sin(angle);
-        let y = height/2 - initial_radius*Math.cos(angle);
+        let x = length/2 + initial_radius*Math.sin(angle);
+        let y = length/2 - initial_radius*Math.cos(angle);
         let bowl =
         {
             id : names[player],
@@ -71,8 +74,8 @@ function clear() {
 
 function out_of_bounds(player) {
     let bowl = bowls[player];
-    if (bowl.x + radius < 0 || bowl.x - radius > width
-        || bowl.y + radius < 0 || bowl.y - radius > height)
+    if (bowl.x + radius < 0 || bowl.x - radius > length
+        || bowl.y + radius < 0 || bowl.y - radius > length)
     {
         players.splice(player, 1);
         bowl.in = false;
@@ -105,12 +108,13 @@ function gravity() {
             let r2 = diff_x*diff_x + diff_y*diff_y;
             let r = Math.sqrt(r2);
 
-          let F = (r < 2 * radius)
-            ? repulsion * (r - 2 * radius)
+            let f = r <= 2 * radius
+            ? -(2 * radius - r) * repulsion
             : coeff / r2;
-            
-            let fx = diff_x/r * F;
-            let fy = diff_y/r * F;
+
+            let fx = f * diff_x/r;
+            let fy = f * diff_y/r;
+
             bowl.fx += fx;
             bowl.fy += fy;
             other.fx -= fx;
@@ -155,7 +159,7 @@ function gravity() {
 
 function iterate() {
     gravity();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    clear_board();
     ctx.beginPath();
     for (let i = 0; i < num; i++)
     {
@@ -192,6 +196,6 @@ export async function move(vectors) {
     for (let cycle = 0; cycle < cycles; cycle++)
     {
         iterate();
-        await delay(1000 * interval);
+        await delay(time *1000 / cycles);
     }
 }
