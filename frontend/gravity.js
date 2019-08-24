@@ -3,20 +3,15 @@ import  { delay } from "./util";
 const width = 400;
 const height = 400;
 const initial_radius = 100;
-const radius = 10;
-const coeff = 50000;
-const repulsive = 5000000;
-const interval = 0.01;
-const cycles = 5000;
+export const radius = 10;
+const coeff = 500000;
+const interval = 0.1;
+const cycles = 200;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 let num;
-let bowls = [];
-let players = [];
-
-canvas.width = width;
-canvas.height = height;
+export let bowls = [];
 
 function draw(bowl) {
     let x = bowl.x;
@@ -55,9 +50,6 @@ export function create_players(names) {
     ctx.stroke();
 }
 
-export function set_id(player) {
-    id = player;
-}
 
 function clear() {
     for (let i = 0; i < num; i++)

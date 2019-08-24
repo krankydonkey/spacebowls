@@ -7,7 +7,8 @@ from sanic.response import json
 
 app = Sanic(__name__)
 
-list_of_players = ["cool", "story", "bro", "needs", "alot", "more", "dragons"]
+list_of_players = []
+players = {}
 
 app.static("/static", "../frontend/dist")
 app.static("/", "../frontend/dist/index.html")
@@ -30,13 +31,15 @@ async def get_name(request):
     player_name = request.json["name"]
 
     if len(list_of_players) > 7:
-        return json("Too many players, try later.")
+        return json(0)
     elif player_name not in list_of_players:
+        players[player_name] = len(list_of_players)
         list_of_players.append(player_name)
+        return json({"players": players})
     else:
         return json(-1)
 
-    return json({"players": list_of_players})
+    
 
 
 @app.route("/get_players")
