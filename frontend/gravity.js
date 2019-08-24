@@ -10,7 +10,7 @@ let id;
 let num;
 let bowls = [];
 
-function create_players(num_players) {
+export function create_players(num_players) {
     num = num_players;
     for (let player = 0; player < num; player++)
     {

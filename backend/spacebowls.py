@@ -39,7 +39,7 @@ async def get_name(request):
     return json({"players": list_of_players})
 
 
-@app.route("/get_players", methods=["POST"])
+@app.route("/get_players")
 async def get_players(request):
     """
     Returns the list of players currently in the game.
