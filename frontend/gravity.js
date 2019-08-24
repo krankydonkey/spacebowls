@@ -5,9 +5,9 @@ const height = 400;
 const initial_radius = 100;
 const radius = 10;
 const coeff = 50000;
-const repulsive = 5000;
+const repulsive = 500000;
 const interval = 0.01;
-const cycles = 500;
+const cycles = 5000;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -15,12 +15,15 @@ let id;
 let num;
 let bowls = [];
 
+canvas.width = width;
+canvas.height = height;
+
 function draw(bowl) {
-    let x = bowl.x*canvas.width/width;
-    let y = bowl.y*canvas.height/height;
+    let x = bowl.x;
+    let y = bowl.y;
     //console.log({ id: bowl.id, x, y });
     ctx.moveTo(x+radius, y);
-    ctx.arc(x, y, radius * canvas.width / width, 0, 2*Math.PI);
+    ctx.arc(x, y, radius, 0, 2*Math.PI);
 }
 
 export function create_players(players) {
@@ -93,10 +96,8 @@ function gravity() {
             let r2 = diff_x*diff_x + diff_y*diff_y;
             let r = Math.sqrt(r2);
             let edge_dist = Math.max(0.1, r - 2 * radius);
-            let den = edge_dist * edge_dist * edge_dist;
-            if (player === 1 && opponent === 0) {
-                console.log({ r, den, r2, G: coeff / r2, R: repulsive / den})
-            }
+            let den = Math.pow(edge_dist, 7);
+            
             let fx = diff_x/r * (coeff/r2 - repulsive/den);
             let fy = diff_y/r * (coeff/r2 - repulsive/den);
             bowl.fx += fx;
