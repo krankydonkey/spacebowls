@@ -4,7 +4,7 @@ import { delay } from "./util";
 const button = document.getElementById("login");
 const input = document.getElementById("username");
 
-button.disabled = true;
+button.disabled = input.value ? false : true;
 
 input.addEventListener("input", function(event) {
   button.disabled = input.value ? false : true;
@@ -40,5 +40,5 @@ async function goToMain() {
             break;
         }
     }
-    move([{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0}]);
+    move([{vx:20, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0}]);
 }

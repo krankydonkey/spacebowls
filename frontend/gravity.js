@@ -5,9 +5,9 @@ const height = 400;
 const initial_radius = 100;
 const radius = 10;
 const coeff = 50000;
-const repulsive = 500000;
+const repulsion = 10;
 const interval = 0.01;
-const cycles = 5000;
+const cycles = 300;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -48,7 +48,7 @@ export function create_players(players) {
         bowls.push(bowl);
         draw(bowl);
     }
-    ctx.stroke();
+    ctx.fill();
 }
 
 export function set_id(player) {
@@ -81,6 +81,7 @@ function out_of_bounds(player) {
 
 function gravity() {
     clear();
+    const collisions = [];
     for (let player = 0; player < num; player++)
     {
         let bowl = bowls[player];
@@ -95,17 +96,53 @@ function gravity() {
             let diff_y = other.y - bowl.y;
             let r2 = diff_x*diff_x + diff_y*diff_y;
             let r = Math.sqrt(r2);
-            let edge_dist = Math.max(0.1, r - 2 * radius);
-            let den = Math.pow(edge_dist, 7);
+
+          let F = (r < 2 * radius)
+            ? repulsion * (r - 2 * radius)
+            : coeff / r2;
             
-            let fx = diff_x/r * (coeff/r2 - repulsive/den);
-            let fy = diff_y/r * (coeff/r2 - repulsive/den);
+            let fx = diff_x/r * F;
+            let fy = diff_y/r * F;
             bowl.fx += fx;
             bowl.fy += fy;
             other.fx -= fx;
             other.fy -= fy;
+
+          if (r < 2 * radius) {
+            collisions.push([player, opponent]);
+          }
         }
     }
+
+    collisions.forEach(([player, opponent]) => {
+      const bowl = bowls[player];
+      const other = bowls[opponent];
+
+      const diff_x = other.x - bowl.x;
+      const diff_y = other.y - bowl.y;
+
+      const r = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+
+      const direction_x = diff_x / r;
+      const direction_y = diff_y / r;
+
+      const bowlVDotDirection = direction_x * bowl.vx + direction_y * bowl.vy;
+      const otherVDotDirection = direction_x * other.vx + direction_y * other.vy;
+
+      if (bowlVDotDirection > 0) {
+        bowl.vx -= bowlVDotDirection * direction_x;
+        bowl.vy -= bowlVDotDirection * direction_y;
+        other.vx += bowlVDotDirection * direction_x;
+        other.vy += bowlVDotDirection * direction_x;
+      }
+
+      if (otherVDotDirection < 0) {
+        other.vx -= otherVDotDirection * direction_x;
+        other.vy -= otherVDotDirection * direction_y;
+        bowl.vx += otherVDotDirection * direction_x;
+        bowl.vy += otherVDotDirection * direction_x;
+      }
+    });
 }
 
 function iterate() {
@@ -131,7 +168,7 @@ function iterate() {
         bowl.vx += bowl.fx*interval;
         bowl.vy += bowl.fy*interval;
     }
-    ctx.stroke();
+    ctx.fill();
 }
 
 export async function move(vectors) {
