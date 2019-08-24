@@ -7,7 +7,6 @@ from sanic.response import json
 
 app = Sanic(__name__)
 
-
 list_of_players = []
 players = {}
 

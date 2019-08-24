@@ -3,16 +3,16 @@ import  { delay } from "./util";
 const length = 400;
 const initial_radius = 100;
 const radius = 10;
-const coeff = 1000000;
-const repulsive = 500;
-const interval = 0.0005;
+const coeff = 10000;
+const repulsion = 100;
+const interval = 0.01;
 const cycles = 5000;
 const time = 2;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 let num;
-let bowls = [];
+export let bowls = [];
 let players = [];
 
 canvas.width = length;
@@ -55,12 +55,9 @@ export function create_players(names) {
         players.push(player);
         draw(bowl);
     }
-    ctx.stroke();
+    ctx.fill();
 }
 
-export function set_id(player) {
-    id = player;
-}
 
 function clear() {
     for (let i = 0; i < num; i++)
@@ -90,6 +87,7 @@ function out_of_bounds(player) {
 
 function gravity() {
     clear();
+    const collisions = [];
     for (let i = 0; i < num; i++)
     {
         let player = players[i];
@@ -108,17 +106,52 @@ function gravity() {
             let r = Math.sqrt(r2);
 
             let f = r <= 2 * radius
-            ? -(2 * radius - r) * repulsive
+            ? -(2 * radius - r) * repulsion
             : coeff / r2;
 
             let fx = f * diff_x/r;
             let fy = f * diff_y/r;
+
             bowl.fx += fx;
             bowl.fy += fy;
             other.fx -= fx;
             other.fy -= fy;
+
+          if (r < 2 * radius) {
+            collisions.push([i, j]);
+          }
         }
     }
+
+    collisions.forEach(([i, j]) => {
+      const bowl = bowls[i];
+      const other = bowls[j];
+
+      const diff_x = other.x - bowl.x;
+      const diff_y = other.y - bowl.y;
+
+      const r = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+
+      const direction_x = diff_x / r;
+      const direction_y = diff_y / r;
+
+      const bowlVDotDirection = direction_x * bowl.vx + direction_y * bowl.vy;
+      const otherVDotDirection = direction_x * other.vx + direction_y * other.vy;
+
+      if (bowlVDotDirection > 0) {
+        bowl.vx -= bowlVDotDirection * direction_x;
+        bowl.vy -= bowlVDotDirection * direction_y;
+        other.vx += bowlVDotDirection * direction_x;
+        other.vy += bowlVDotDirection * direction_x;
+      }
+
+      if (otherVDotDirection < 0) {
+        other.vx -= otherVDotDirection * direction_x;
+        other.vy -= otherVDotDirection * direction_y;
+        bowl.vx += otherVDotDirection * direction_x;
+        bowl.vy += otherVDotDirection * direction_x;
+      }
+    });
 }
 
 function iterate() {
@@ -145,7 +178,7 @@ function iterate() {
         bowl.vx += bowl.fx*interval;
         bowl.vy += bowl.fy*interval;
     }
-    ctx.stroke();
+    ctx.fill();
 }
 
 export async function move(vectors) {
