@@ -84,7 +84,7 @@ vectors = [None, None, None, None, None, None, None, None]
 async def add_to_vectors(request):
     global vectors
 
-    vector = request.json["name"]
+    vector = request.json
 
     if not None in vectors:
         vectors = [None] * 8

@@ -4,6 +4,7 @@ import { delay } from "./util";
 const button = document.getElementById("login");
 const input = document.getElementById("username");
 const canvas = document.getElementById("game");
+const goButton = document.getElementById("move");
 export let id;
 let alt_id;
 let max_vec = 25;
@@ -46,10 +47,8 @@ async function goToMain() {
         let response = await fetch("/get_players");
         const list = await response.json();
         create_players(list.players);
-        console.log("X: " + bowls[id].vx + " Y: " + bowls[id].vy);
         if (list.players.length == 8){
             for (let i = 0; i < 3; ++i) {
-              console.log("???");
               await goToRoundMove(list.players);
             }
             break;
@@ -66,7 +65,7 @@ function getCoordsInCanvas(x, y) {
 }
 
 async function goToRoundMove(players){
-    let vx, vy;
+    let vx = 0, vy = 0;
 
     if (bowls[id].in) {
       // this function draws an arrow from a player's bowl/planet and 
@@ -76,16 +75,10 @@ async function goToRoundMove(players){
       let new_x;
       let new_y;
 
-      let resolve;
-      const haveData = new Promise(res => {
-        resolve = res;
-      });
-
       function mouseDown(event) {
+        console.log("yo");
         const { x, y } = getCoordsInCanvas(event.clientX, event.clientY);
-        console.log({ x, y });
         if ((x - og_x) * (x - og_x) + (y - og_y) * (y - og_y) < radius * radius) {
-          document.removeEventListener("mousedown", mouseDown);
 
           function mouseMove(event) {
             const { x: move_x, y: move_y } = getCoordsInCanvas(event.clientX, event.clientY);
@@ -99,11 +92,17 @@ async function goToRoundMove(players){
             new_x = getCoordsInCanvas(event.clientX, event.clientY).x;
             new_y = getCoordsInCanvas(event.clientX, event.clientY).y;
 
-            console.log({ new_x, new_y });
+            let vx_unscaled = new_x - og_x;
+            let vy_unscaled = new_y - og_y;
+
+            const { height, width } = canvas.getBoundingClientRect();
+            const maxDraw = Math.sqrt(height * height + width * width);
+
+            vx = 200 / maxDraw * vx_unscaled;
+            vy = 200 / maxDraw * vy_unscaled;
 
             document.removeEventListener("mouseup", mouseUp);
             document.removeEventListener("mousemove", mouseMove);
-            resolve();
           }
 
           document.addEventListener("mouseup", mouseUp);
@@ -111,24 +110,22 @@ async function goToRoundMove(players){
         }
       }
 
-      document.addEventListener("mousedown", mouseDown);
-
-      await haveData;
-
-      let vx_unscaled = new_x - og_x;
-      let vy_unscaled = new_y - og_y;
-
-      const { height, width } = canvas.getBoundingClientRect();
-      const maxDraw = Math.sqrt(height * height + width * width);
-
-      vx = 200 / maxDraw * vx_unscaled;
-      vy = 200 / maxDraw * vy_unscaled;
-    } else {
-      vx = 0;
-      vy = 0;
+      const x = event => mouseDown(event);
+      document.addEventListener("mousedown", x);
+      goButton.disabled = false;
+      await new Promise(res => {
+        function click() {
+          goButton.removeEventListener("click", click);
+          goButton.disabled = true;
+          res();
+        }
+        goButton.addEventListener("click", click);
+        document.removeEventListener("mousedown", mouseDown);
+      });
+      document.removeEventListener("mousedown", x);
     }
 
-    let response = await fetch("/vector", { method: "POST", body: JSON.stringify({ name: { id, vx, vy } }) });
+    let response = await fetch("/vector", { method: "POST", body: JSON.stringify({ id, vx, vy }) });
     let data = await response.json();
   
     while (data.vectors.some(x => x === null)) {

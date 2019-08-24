@@ -59,16 +59,28 @@ input {
 }
 
 #main-page {
-    display: none;
+  display: none;
+  width: 100%;
+  grid-template-areas: "canvas leaderboard" "blank go";
+  grid-gap: 1rem;
+}
+
+#move {
+  grid-area: go;
+}
+
+#canvas-wrapper {
+  grid-area: canvas;
     width: calc(80vh - 3rem);
     max-width: calc(100% - 2rem);
     height: max-content;
     position: relative;
     overflow: visible;
     grid-template-areas: "a";
+    display: grid;
 }
 
-#main-page::after {
+#canvas-wrapper::after {
     grid-area: a;
   height: 0;
   top: 0;
