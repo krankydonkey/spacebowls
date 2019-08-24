@@ -71,6 +71,12 @@ input {
     border-style: solid;
     
     width: 80%;
-    padding-top: 80%;
-    height: 0;
+    position: relative;
+}
+
+#game::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    padding-top: 100%;
 }
