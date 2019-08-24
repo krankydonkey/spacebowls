@@ -31,7 +31,8 @@ function create_players(num_players) {
 }
 
 function clear() {
-    for (let player = 0; player < num; player++) {
+    for (let player = 0; player < num; player++)
+    {
         let bowl = bowls[player];
         bowl.fx = 0;
         bowl.fy = 0;
@@ -41,9 +42,12 @@ function clear() {
 function out_of_bounds(player) {
     let bowl = bowls[player];
     if (bowl.x + r < 0 || bowl.x - r > width
-        || bowl.y + r < 0 || bowl.y - r > height) {
+        || bowl.y + r < 0 || bowl.y - r > height)
+    {
         return true;
-    } else {
+    }
+    else
+    {
         bowls.splice(player, 1);
         return false;
     }
@@ -54,10 +58,10 @@ function gravity() {
     for (let player = 0; player < num; player++)
     {
         let bowl = bowls[player];
-        for (let other_id = 0; other_id < num; other_id++)
+        for (let opponent = 0; opponent < num; opponent++)
         {
-            let other = bowls[other_id];
-            if (other_id >= player)
+            let other = bowls[opponent];
+            if (opponent >= player)
             {
                 break;
             }
@@ -76,7 +80,8 @@ function gravity() {
 
     function iterate() {
         gravity();
-        for (let player = 0; player < num; player++) {
+        for (let player = 0; player < num; player++)
+        {
             let bowl = bowls[player];
             // Location calculations s = ut + 1/2 at^2
             bowl.x += bowl.vx*interval + 0.5*bowl.fx*interval*interval;
@@ -94,13 +99,15 @@ function gravity() {
     }
 
     function move(vectors) {
-        for (let player = 0; player < num; player++) {
+        for (let player = 0; player < num; player++)
+        {
             let bowl = bowls[player];
             let vector = vectors[player]
             bowl.vx += vector.vx;
             bowl.vy += vector.vy;
         }
-        for (let cycle = 0; cycle < cycles; cycle++) {
+        for (let cycle = 0; cycle < cycles; cycle++)
+        {
             iterate();
         }
     }
