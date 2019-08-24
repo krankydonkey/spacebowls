@@ -61,24 +61,32 @@ export function create_players(names) {
     players = [];
     clear_board();
     // ctx.beginPath();
-    for (let player = 0; player < num; player++)
+    for (let player = 0; player < 8; player++)
     {
-        let angle = 2*Math.PI*player/(num);
-        let x = length/2 + initial_radius*Math.sin(angle);
-        let y = length/2 - initial_radius*Math.cos(angle);
-        let bowl =
-        {
-            id : names[player],
-            x : x,
-            y : y,
-            vx : 0,
-            vy : 0,
-            fx : 0,
-            fy : 0,
-            in : true
-        };
-        bowls.push(bowl);
-        players.push(player);
+        if(player < num){
+
+        
+            let angle = 2*Math.PI*player/(num);
+            let x = length/2 + initial_radius*Math.sin(angle);
+            let y = length/2 - initial_radius*Math.cos(angle);
+            let bowl =
+            {
+                id : names[player],
+                x : x,
+                y : y,
+                vx : 0,
+                vy : 0,
+                fx : 0,
+                fy : 0,
+                in : true
+            };
+            bowls.push(bowl);
+            players.push(player);
+
+            document.getElementById(`p${player + 1}`).innerText = `${names[player]} [A]`;
+        } else{
+            document.getElementById(`p${player + 1}`).innerText = `Waiting...`;
+        }
     }
 
   draw_all();
@@ -100,9 +108,11 @@ function out_of_bounds(i) {
     if (bowl.x + radius < 0 || bowl.x - radius > length
         || bowl.y + radius < 0 || bowl.y - radius > length)
     {
+        document.getElementById(`p${players[i] + 1}`).innerText = `${bowl.id} [D]`;
         players.splice(i, 1);
         bowl.in = false;
         num--;
+        
         return true;
     }
     else

@@ -63,13 +63,20 @@ input {
   width: 100%;
   grid-template-areas: "canvas leaderboard" "go leaderboard";
   grid-template-rows: 1fr auto;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr fit-content(20%);
   grid-gap: 1rem;
   justify-items: center;
 }
 
 #move {
   grid-area: go;
+}
+
+#leaderboard {
+    grid-area: leaderboard;
+    overflow-x: scroll;
+    max-width: 100%;
+    white-space: nowrap;
 }
 
 #canvas-wrapper {

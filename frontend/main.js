@@ -22,19 +22,21 @@ document.getElementById("login-page").addEventListener("submit", async function(
   }
     let response = await fetch("/name", { method: "POST", body: JSON.stringify({ name: input.value }) });
     const data = await response.json();
-    id = data.players[input.value];
-    alt_id = input.value;
+    console.log(data);
     if (data == -1) {
         document.getElementById("status").innerText = "Name taken. Enter a different name."
     } else if (data == 0) {
         document.getElementById("status").innerText = "Player limit reached, try again later."
     } else {
+        id = data.players[input.value];
+        alt_id = input.value;
         await goToMain();
     }
   
 }, false);
 
-function goToLogin() {
+async function goToLogin() {
+    await (await fetch("/reset")).json();
     document.getElementById("main-page").style.display = "none";
     document.getElementById("login-page").style.display = "flex";
 }
@@ -43,7 +45,7 @@ async function goToMain() {
     document.getElementById("login-page").style.display = "none";
     document.getElementById("main-page").style.display = "grid";
     while(1){
-        await delay(500);
+        
         let response = await fetch("/get_players");
         const list = await response.json();
         create_players(list.players);
@@ -51,8 +53,15 @@ async function goToMain() {
             for (let i = 0; i < 3; ++i) {
               await goToRoundMove(list.players);
             }
+            
+            // show the winner
+            await delay(3000);
+
+            await goToLogin();
+
             break;
         }
+        await delay(500);
     }
 }
 
@@ -130,8 +139,14 @@ async function goToRoundMove(players){
     while (data.vectors.some(x => x === null)) {
       response = await fetch("/get_vectors");
       data = await response.json();
+      data.vectors.forEach((move, id) => {
+          const moved = move ? "Moved" : "...";
+          const status = bowls[id].in ? moved : "D";
+          document.getElementById(`p${id + 1}`).innerText = `${bowls[id].id} [${status}]`;
+      })
       await delay(200);
     }
 
     await move(data.vectors);
 }
+
