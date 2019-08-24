@@ -76,7 +76,6 @@ async function goToRoundMove(players){
       let new_y;
 
       function mouseDown(event) {
-        console.log("yo");
         const { x, y } = getCoordsInCanvas(event.clientX, event.clientY);
         if ((x - og_x) * (x - og_x) + (y - og_y) * (y - og_y) < radius * radius) {
 

@@ -15,7 +15,9 @@ app.static("/", "../frontend/dist/index.html")
 
 @app.route("/reset")
 async def kill_it_all(request):
-    players = {}
+    global list_of_players
+    global vectors
+    players.clear()
     list_of_players = []
     vectors = [None] * 8
     return json(None)
