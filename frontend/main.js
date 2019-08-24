@@ -36,5 +36,9 @@ async function goToMain() {
         let response = await fetch("/get_players");
         const list = await response.json();
         create_players(list.players);
+        if (list.players.length == 8){
+            break;
+        }
     }
+    move([{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0},{vx:0, vy:0}]);
 }
