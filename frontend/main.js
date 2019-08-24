@@ -14,12 +14,13 @@ input.addEventListener("input", function(event) {
   button.disabled = input.value ? false : true;
 });
 
-button.addEventListener("click", async function(event) {
-    // put code here
+document.getElementById("login-page").addEventListener("submit", async function(event) {
+  event.preventDefault();
+  if (!input.value) {
+    return;
+  }
     let response = await fetch("/name", { method: "POST", body: JSON.stringify({ name: input.value }) });
     const data = await response.json();
-    console.log(input.value);
-    console.log(data.players);
     id = data.players[input.value];
     alt_id = input.value;
     if (data == -1) {
@@ -30,7 +31,7 @@ button.addEventListener("click", async function(event) {
         await goToMain();
     }
   
-});
+}, false);
 
 function goToLogin() {
     document.getElementById("main-page").style.display = "none";
