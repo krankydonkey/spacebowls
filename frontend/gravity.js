@@ -25,9 +25,13 @@ function create_players(num_players) {
             vx : 0,
             vy : 0,
             fx : 0,
-            fy : 0,
+            fy : 0
         });
     }
+}
+
+function set_id(player) {
+    id = player;
 }
 
 function clear() {
