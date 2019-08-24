@@ -71,7 +71,7 @@ async def clear_players(request):
     list_of_players = []
 
 
-vectors = []
+vectors = [None, None, None, None, None, None, None, None]
 
 
 @app.route("/vector", methods=["POST"])
@@ -79,12 +79,18 @@ async def add_to_vectors(request):
     global vectors
 
     vector = request.json["name"]
-    vectors.append(vector)
+    index, vx, vy = vector
+    vectors[index] = (vx, vy)
 
-    if len(vectors) == 8:
-        json_vectors = json(vectors)
-        vectors = []
-        return json_vectors
+    for item in vectors:
+        if item is None:
+            return
+    return vectors
+
+    # if len(vectors) == 8:
+    #     json_vectors = json(vectors)
+    #     vectors = []
+    #     return json_vectors
 
 
 if __name__ == '__main__':
