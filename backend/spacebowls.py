@@ -7,7 +7,7 @@ from sanic.response import json
 
 app = Sanic(__name__)
 
-list_of_players = []
+list_of_players = ["cool", "story", "bro", "needs", "alot", "more", "dragons"]
 
 app.static("/static", "../frontend/dist")
 app.static("/", "../frontend/dist/index.html")

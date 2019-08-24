@@ -5,15 +5,15 @@ const height = 400;
 const initial_radius = 100;
 const radius = 10;
 const coeff = 50000;
-const repulsive = 500000;
+const repulsive = 5000000;
 const interval = 0.01;
 const cycles = 5000;
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-let id;
 let num;
 let bowls = [];
+let players = [];
 
 canvas.width = width;
 canvas.height = height;
@@ -26,8 +26,10 @@ function draw(bowl) {
     ctx.arc(x, y, radius, 0, 2*Math.PI);
 }
 
-export function create_players(players) {
-    num = players.length;
+export function create_players(names) {
+    num = names.length;
+    bowls = [];
+    players = [];
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
     for (let player = 0; player < num; player++)
@@ -37,15 +39,17 @@ export function create_players(players) {
         let y = height/2 - initial_radius*Math.cos(angle);
         let bowl =
         {
-            id : players[player],
+            id : names[player],
             x : x,
             y : y,
             vx : 0,
             vy : 0,
             fx : 0,
-            fy : 0
+            fy : 0,
+            in : true
         };
         bowls.push(bowl);
+        players.push(player);
         draw(bowl);
     }
     ctx.stroke();
@@ -56,8 +60,9 @@ export function set_id(player) {
 }
 
 function clear() {
-    for (let player = 0; player < num; player++)
+    for (let i = 0; i < num; i++)
     {
+        let player = players[i];
         let bowl = bowls[player];
         bowl.fx = 0;
         bowl.fy = 0;
@@ -69,7 +74,8 @@ function out_of_bounds(player) {
     if (bowl.x + radius < 0 || bowl.x - radius > width
         || bowl.y + radius < 0 || bowl.y - radius > height)
     {
-        bowls.splice(player, 1);
+        players.splice(player, 1);
+        bowl.in = false;
         num--;
         return true;
     }
@@ -81,11 +87,13 @@ function out_of_bounds(player) {
 
 function gravity() {
     clear();
-    for (let player = 0; player < num; player++)
+    for (let i = 0; i < num; i++)
     {
+        let player = players[i];
         let bowl = bowls[player];
-        for (let opponent = 0; opponent < num; opponent++)
+        for (let j = 0; j < num; j++)
         {
+            let opponent = players[j];
             let other = bowls[opponent];
             if (opponent >= player)
             {
@@ -112,9 +120,10 @@ function iterate() {
     gravity();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
-    for (let player = 0; player < num; player++)
+    for (let i = 0; i < num; i++)
     {
-    let bowl = bowls[player];
+        let player = players[i];
+        let bowl = bowls[player];
         // Location calculations s = ut + 1/2 at^2
         bowl.x += bowl.vx*interval + 0.5*bowl.fx*interval*interval;
         bowl.y += bowl.vy*interval + 0.5*bowl.fy*interval*interval;
@@ -135,8 +144,9 @@ function iterate() {
 }
 
 export async function move(vectors) {
-    for (let player = 0; player < num; player++)
+    for (let i = 0; i < num; i++)
     {
+        let player = players[i];
         let bowl = bowls[player];
         let vector = vectors[player]
         bowl.vx += vector.vx;
