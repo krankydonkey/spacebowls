@@ -60,16 +60,28 @@ input {
 
 #main-page {
     display: none;
-    width: 100%;
-    flex: 2;
-    justify-content: center;
+    width: calc(70vh - 2rem);
+    max-width: calc(100% - 2rem);
+    height: max-content;
+    position: relative;
+    overflow: visible;
+}
+
+#main-page::after {
+  height: 0;
+  top: 0;
+  padding-bottom: 100%;
+  position: relative;
+  content: "";
+  width: 100%;
+  display: inline-block;
 }
 
 #game {
     border: 2px;
     border-color: white;
     border-style: solid;
-    
-    width: 640px;
-    height: 640px;
+
+    height: 100%;
+    width: 100%;
 }
