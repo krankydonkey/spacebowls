@@ -1,3 +1,5 @@
+import {create_players, move} from 'gravity';
+
 const button = document.getElementById("login");
 const input = document.getElementById("username");
 
@@ -16,3 +18,4 @@ function goToMain() {
     document.getElementById("login-page").style.display = "none";
     document.getElementById("main-page").style.display = "flex";
 }
+

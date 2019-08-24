@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "gravity": "^0.0.2",
     "parcel-bundler": "^1.12.3"
   },
   "scripts": {
