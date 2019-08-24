@@ -6,6 +6,7 @@ const input = document.getElementById("username");
 const canvas = document.getElementById("game");
 export let id;
 let alt_id;
+let max_vec = 25;
 
 button.disabled = input.value ? false : true;
 
@@ -69,10 +70,10 @@ async function goToRoundMove(players){
     if (bowls[id].in) {
       // this function draws an arrow from a player's bowl/planet and 
       //the length that they stretch it out to is the speed they're choosing
-      let og_vx = bowls[id].x
-      let og_vy = bowls[id].y;
-      let new_vx;
-      let new_vy;
+      let og_x = bowls[id].x
+      let og_y = bowls[id].y;
+      let new_x;
+      let new_y;
 
       let resolve;
       const haveData = new Promise(res => {
@@ -82,21 +83,22 @@ async function goToRoundMove(players){
       function mouseDown(event) {
         const { x, y } = getCoordsInCanvas(event.clientX, event.clientY);
         console.log({ x, y });
-        if ((x - og_vx) * (x - og_vx) + (y - og_vy) * (y - og_vy) < radius * radius) {
+        if ((x - og_x) * (x - og_x) + (y - og_y) * (y - og_y) < radius * radius) {
           document.removeEventListener("mousedown", mouseDown);
 
           function mouseMove(event) {
             const { x: move_x, y: move_y } = getCoordsInCanvas(event.clientX, event.clientY);
             clear_board();
             draw_all();
-            draw_line(x, y, move_x, move_y);
+            let r = Math.sqrt(move_x*move_x + move_y*move_y);
+            draw_line(og_x, og_y, move_x, move_y);
           }
 
           function mouseUp(event) {
-            new_vx = getCoordsInCanvas(event.clientX, event.clientY).x;
-            new_vy = getCoordsInCanvas(event.clientX, event.clientY).y;
+            new_x = getCoordsInCanvas(event.clientX, event.clientY).x;
+            new_y = getCoordsInCanvas(event.clientX, event.clientY).y;
 
-            console.log({ new_vx, new_vy });
+            console.log({ new_x, new_y });
 
             document.removeEventListener("mouseup", mouseUp);
             document.removeEventListener("mousemove", mouseMove);
@@ -112,8 +114,8 @@ async function goToRoundMove(players){
 
       await haveData;
 
-      let vx_unscaled = new_vx - og_vx;
-      let vy_unscaled = new_vy - og_vy;
+      let vx_unscaled = new_x - og_x;
+      let vy_unscaled = new_y - og_y;
 
       const { height, width } = canvas.getBoundingClientRect();
       const maxDraw = Math.sqrt(height * height + width * width);
