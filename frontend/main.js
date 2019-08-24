@@ -1,4 +1,4 @@
-import {create_players, move} from 'gravity';
+import {create_players, move} from './gravity';
 
 const button = document.getElementById("login");
 const input = document.getElementById("username");
