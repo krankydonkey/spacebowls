@@ -70,13 +70,6 @@ input {
     border-color: white;
     border-style: solid;
     
-    width: 80%;
-    position: relative;
-}
-
-#game::after {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    padding-top: 100%;
+    width: 640px;
+    height: 640px;
 }
