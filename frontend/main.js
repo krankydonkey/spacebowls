@@ -30,7 +30,7 @@ function goToLogin() {
 
 async function goToMain() {
     document.getElementById("login-page").style.display = "none";
-    document.getElementById("main-page").style.display = "flex";
+    document.getElementById("main-page").style.display = "grid";
     while(1){
         await delay(500);
         let response = await fetch("/get_players");

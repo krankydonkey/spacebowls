@@ -60,14 +60,16 @@ input {
 
 #main-page {
     display: none;
-    width: calc(70vh - 2rem);
+    width: calc(80vh - 3rem);
     max-width: calc(100% - 2rem);
     height: max-content;
     position: relative;
     overflow: visible;
+    grid-template-areas: "a";
 }
 
 #main-page::after {
+    grid-area: a;
   height: 0;
   top: 0;
   padding-bottom: 100%;
@@ -78,6 +80,7 @@ input {
 }
 
 #game {
+    grid-area: a;
     border: 2px;
     border-color: white;
     border-style: solid;
