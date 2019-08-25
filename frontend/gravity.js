@@ -17,7 +17,7 @@ const half = length/2;
 let num;
 export let bowls = [];
 let players = [];
-let ranks;
+let ranks = [];
 
 canvas.width = length;
 canvas.height = length;
@@ -64,6 +64,7 @@ export function create_players(names) {
   num = names.length;
   bowls = [];
   players = [];
+  ranks = [];
   clear_board();
   // ctx.beginPath();
   for (let player = 0; player < 8; player++)
@@ -248,9 +249,10 @@ export async function rank() {
   sorted.sort(function(a, b) {
     return b.d2 - a.d2;
   });
+  console.log(sorted)
   for (let i = 0; i < num; i++) {
     let player = sorted[i].player;
-    ranks[player] = num+1;
+    ranks[player] = i+1;
   }
   return ranks;
 }

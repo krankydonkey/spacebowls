@@ -1,4 +1,4 @@
-import { ctx, draw_all, draw_line, clear_board, create_players, move, bowls, radius } from './gravity';
+import { ctx, rank, draw_all, draw_line, clear_board, create_players, move, bowls, radius } from './gravity';
 import { delay } from "./util";
 
 const button = document.getElementById("login");
@@ -84,7 +84,7 @@ async function goToMain() {
             ctx.clearRect(0, 0, 400, 400);
             ctx.fillText("Winner:", 160, 180);
             ctx.fillText(winner, 160, 200);
-            
+            console.log(await rank());
             await delay(8000);
 
             await goToLogin();
