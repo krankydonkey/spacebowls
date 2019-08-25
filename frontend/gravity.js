@@ -5,6 +5,7 @@ const length = 400;
 const initial_radius = 100;
 export const radius = 10;
 const coeff = 40000;
+const centerco = 10000;
 const repulsion = 100;
 const interval = 0.01;
 const cycles = 1000;
@@ -28,15 +29,16 @@ export function clear_board() {
 }
 
 export function draw_line(x1, y1, x2, y2) {
-  let angle = Math.atan2(y2-y1, x1-x1);
+  let angle = Math.atan2(y2-y1, x2-x1);
   let r = Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1));
   let headlength = 0.2*r;
+  let gap = Math.PI/6;
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
-  ctx.lineTo(x2 - headlength * Math.cos(angle - Math.PI/6), y2 - headlength * Math.sin(angle - Math.PI / 6));
+  ctx.lineTo(x2 - headlength * Math.cos(angle - gap), y2 - headlength * Math.sin(angle - gap));
   ctx.moveTo(x2, y2);
-  ctx.lineTo(x2 - headlength * Math.cos(angle + Math.PI/6), y2 - headlength * Math.sin(angle + Math.PI / 6));
+  ctx.lineTo(x2 - headlength * Math.cos(angle + gap), y2 - headlength * Math.sin(angle + gap));
   ctx.stroke();
 }
 
@@ -159,6 +161,15 @@ function gravity() {
       if (r < 2 * radius) {
         collisions.push([i, j]);
       }
+    }
+    // Centre gravity
+    let diff_x = half - bowl.x;
+    let diff_y = half - bowl.y;
+    let r2 = diff_x*diff_x + diff_y*diff_y;
+    let r = Math.sqrt(r2);
+    if (r > 2*radius) {
+      bowl.fx += centerco * diff_x / (r2*r);
+      bowl.fy += centerco * diff_y / (r2*r);
     }
   }
 

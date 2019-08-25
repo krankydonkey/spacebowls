@@ -54,38 +54,21 @@ async function goToMain() {
               await goToRoundMove(list.players);
             }
 
-            let distances = [];
-            let min = 100000;
-            for (let i = 0; i < list.players.length; i++) {
-                let player = list.players[i];
-                let bowl = bowls[i];
-                if (bowls.in) {
-                  let x = bowl.x;
-                  let y = bowl.y;
-                  let midpoint_x = length / 2;
-                  let midpoint_y = canvas.height / 2;
-                  // finds the distance between the center point and the bowl using
-                  // Pythagoras' Theorem
-                  distances[i] = Math.sqrt(Math.pow(midpoint_y - y, 2)
-                      + Math.pow(midpoint_x - x, 2));
-                  if (distances[i] < min) {
-                    min = distances[i];
-                  }
-                }
-            }
-
-            let winningIndex = distances.indexOf(min);
-            let winner = winningIndex === -1 ? "All players lost" : list.players[winningIndex];
-
             await delay(2000);
 
-            // show the winner
+            const scores = await rank();
+            
             ctx.fillStyle = "rgb(254, 206, 105)";
             ctx.clearRect(0, 0, 400, 400);
-            ctx.fillText("Winner:", 160, 180);
-            ctx.fillText(winner, 160, 200);
-            console.log(await rank());
-            await delay(8000);
+            
+            ctx.fillText("Winner:", 160, 160);
+            for (let i = 0; i < 8; ++i) {
+              const name = list.players[i];
+              const score = scores[i];
+              ctx.fillText(`${["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"][score - 1]}: ${name}${bowls[i].in ? "" : " (dead)"}`, 160, 160 + 20 * score);
+            }
+
+            await delay(15000);
 
             await goToLogin();
 
@@ -113,6 +96,46 @@ async function goToRoundMove(players){
       let og_y = bowls[id].y;
       let new_x;
       let new_y;
+
+      function touchDown(event) {
+        alert("touchstart" + JSON.stringify(event));
+        const { x, y } = getCoordsInCanvas(event.clientX, event.clientY);
+        if ((x - og_x) * (x - og_x) + (y - og_y) * (y - og_y) < radius * radius) {
+          function touchMove(event) {
+            const { x: move_x, y: move_y } = getCoordsInCanvas(event.clientX, event.clientY);
+            clear_board();
+            draw_all();
+            draw_line(og_x, og_y, move_x, move_y);
+          }
+
+          function touchUp(event) {
+            new_x = getCoordsInCanvas(event.clientX, event.clientY).x;
+            new_y = getCoordsInCanvas(event.clientX, event.clientY).y;
+
+            let vx_unscaled = new_x - og_x;
+            let vy_unscaled = new_y - og_y;
+
+            const { height, width } = canvas.getBoundingClientRect();
+            const maxDraw = Math.sqrt(height * height + width * width);
+            vx = 200 / maxDraw * vx_unscaled;
+            vy = 200 / maxDraw * vy_unscaled;
+
+            document.removeEventListener("touchend", touchUp, false);
+            document.removeEventListener("touchmove", touchMove, false);
+            document.removeEventListener("touchcancel", touchCancel, false);
+          }
+
+          function touchCancel(event) {
+            document.removeEventListener("touchend", touchUp, false);
+            document.removeEventListener("touchmove", touchMove, false);
+            document.removeEventListener("touchcancel", touchCancel, false);
+          }
+
+          document.addEventListener("touchend", touchUp, false);
+          document.addEventListener("touchmove", touchMove, false);
+          document.addEventListener("touchcancel", touchCancel, false);
+        }
+      }
 
       function mouseDown(event) {
         const { x, y } = getCoordsInCanvas(event.clientX, event.clientY);
@@ -148,7 +171,9 @@ async function goToRoundMove(players){
       }
 
       const x = event => mouseDown(event);
+      const y = event => touchDown(event);
       document.addEventListener("mousedown", x);
+      document.addEventListener("touchstart", y, false);
       goButton.disabled = false;
       await new Promise(res => {
         function click() {
@@ -157,9 +182,9 @@ async function goToRoundMove(players){
           res();
         }
         goButton.addEventListener("click", click);
-        document.removeEventListener("mousedown", mouseDown);
       });
       document.removeEventListener("mousedown", x);
+      document.removeEventListener("touchstart", y, false);
     }
 
     let response = await fetch("/vector", { method: "POST", body: JSON.stringify({ id, vx, vy }) });
