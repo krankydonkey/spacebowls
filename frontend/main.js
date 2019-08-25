@@ -57,6 +57,23 @@ async function goToMain() {
             // show the winner
             await delay(3000);
 
+            let distances = [];
+            for (let i = 0; i < num; i++) {
+                let player = list.players[i];
+                let bowl = bowls[player];
+                let x = bowl.x;
+                let y = bowl.y;
+                let midpoint_x = length / 2;
+                let midpoint_y = canvas.height / 2;
+                // finds the distance between the center point and the bowl using
+                // Pythagoras' Theorem
+                distances[i] = Math.sqrt(Math.pow(midpoint_y - y, 2)
+                    + Math.pow(midpoint_x - x, 2));
+            }
+
+            let max = Math.max(...distances);
+            let winner = list.players[distances.findIndex(max)];
+
             await goToLogin();
 
             break;
@@ -105,7 +122,6 @@ async function goToRoundMove(players){
 
             const { height, width } = canvas.getBoundingClientRect();
             const maxDraw = Math.sqrt(height * height + width * width);
-
             vx = 200 / maxDraw * vx_unscaled;
             vy = 200 / maxDraw * vy_unscaled;
 
