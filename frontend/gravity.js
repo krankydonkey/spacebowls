@@ -13,6 +13,7 @@ const canvas = document.getElementById("game");
 export const ctx = canvas.getContext("2d");
     ctx.font = "16px Courier New";
 const half = length/2;
+export let images = [ "sun", "mercury", "earth", "moon", "mars", "jupiter", "neptune", "spacerock"];
 
 let num;
 export let bowls = [];
@@ -46,10 +47,7 @@ function draw(player) {
 
   let x = bowl.x;
   let y = bowl.y;
-  ctx.beginPath();
-  ctx.moveTo(x+radius, y);
-  ctx.arc(x, y, radius, 0, 2*Math.PI);
-  ctx.fill();
+  ctx.drawImage(document.getElementById(images[player]), (x - radius), (y - radius), (radius * 2), (radius * 2));
 
   ctx.fillText(bowls[player].id, x + radius, y - radius);
 }
