@@ -54,37 +54,20 @@ async function goToMain() {
               await goToRoundMove(list.players);
             }
 
-            let distances = [];
-            let min = 100000;
-            for (let i = 0; i < list.players.length; i++) {
-                let player = list.players[i];
-                let bowl = bowls[i];
-                if (bowls.in) {
-                  let x = bowl.x;
-                  let y = bowl.y;
-                  let midpoint_x = length / 2;
-                  let midpoint_y = canvas.height / 2;
-                  // finds the distance between the center point and the bowl using
-                  // Pythagoras' Theorem
-                  distances[i] = Math.sqrt(Math.pow(midpoint_y - y, 2)
-                      + Math.pow(midpoint_x - x, 2));
-                  if (distances[i] < min) {
-                    min = distances[i];
-                  }
-                }
-            }
-
-            let winningIndex = distances.indexOf(min);
-            let winner = winningIndex === -1 ? "All players lost" : list.players[winningIndex];
-
             await delay(2000);
 
-            // show the winner
+            const scores = await rank();
+            
             ctx.fillStyle = "rgb(254, 206, 105)";
             ctx.clearRect(0, 0, 400, 400);
-            ctx.fillText("Winner:", 160, 180);
-            ctx.fillText(winner, 160, 200);
-            console.log(await rank());
+            
+            ctx.fillText("Winner:", 160, 160);
+            for (let i = 0; i < 8; ++i) {
+              const name = list.players[i];
+              const score = scores[i];
+              ctx.fillText(`${["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "last"][score]}: ${name}`, 160, 180 + 20 * i);
+            }
+
             await delay(8000);
 
             await goToLogin();
