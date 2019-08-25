@@ -27,9 +27,15 @@ export function clear_board() {
 }
 
 export function draw_line(x1, y1, x2, y2) {
+  let angle = Math.atan2(y2-y1, x1-x1);
+  let r = Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1));
+  let headlength = 0.2*r;
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
+  ctx.lineTo(x2 - headlength * Math.cos(angle - Math.PI/6), y2 - headlength * Math.sin(angle - Math.PI / 6));
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - headlength * Math.cos(angle + Math.PI/6), y2 - headlength * Math.sin(angle + Math.PI / 6));
   ctx.stroke();
 }
 
@@ -51,9 +57,6 @@ function draw(player) {
 export function draw_all() {
   for (let i = 0; i < num; ++i) {
     draw(players[i]);
-  }
-  if (bowls[id].in) {
-    draw(id);
   }
 }
 
