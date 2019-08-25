@@ -5,7 +5,7 @@ const length = 400;
 const initial_radius = 100;
 export const radius = 10;
 const coeff = 40000;
-const centerco = 10000;
+const centerco = 80000;
 const repulsion = 100;
 const interval = 0.01;
 const cycles = 1000;
@@ -33,6 +33,7 @@ export function draw_line(x1, y1, x2, y2) {
   let r = Math.sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1));
   let headlength = 0.2*r;
   let gap = Math.PI/6;
+  ctx.strokeStyle = "rgb(254, 206, 105)";
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
@@ -43,9 +44,9 @@ export function draw_line(x1, y1, x2, y2) {
 }
 
 function draw(player) {
-  ctx.fillStyle = (player == id) ? "green" : "red";
+    ctx.fillStyle = (player == id) ? "rgb(254, 206, 105)" : "white";
 
-  const bowl = bowls[player];
+    const bowl = bowls[player];
 
   let x = bowl.x;
   let y = bowl.y;
