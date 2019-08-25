@@ -98,7 +98,6 @@ async function goToRoundMove(players){
           const maxSpeed = 300;
 
       function touchDown(event) {
-        alert("touchstart" + JSON.stringify(event));
         const { x, y } = getCoordsInCanvas(event.clientX, event.clientY);
         if ((x - og_x) * (x - og_x) + (y - og_y) * (y - og_y) < radius * radius) {
           function touchMove(event) {
