@@ -50,7 +50,7 @@ async function goToMain() {
         const list = await response.json();
         create_players(list.players);
         if (list.players.length == 8){
-            for (let i = 0; i < 3; ++i) {
+            for (let i = 0; i < 5; ++i) {
               await goToRoundMove(list.players);
             }
 
