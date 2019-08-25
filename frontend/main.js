@@ -59,13 +59,12 @@ async function goToMain() {
             const scores = await rank();
             
             ctx.fillStyle = "rgb(254, 206, 105)";
-            ctx.clearRect(0, 0, 400, 400);
             
-            ctx.fillText("Winner:", 160, 160);
+            ctx.fillText("Winner:", 480, 480);
             for (let i = 0; i < 8; ++i) {
               const name = list.players[i];
               const score = scores[i];
-              ctx.fillText(`${["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"][score - 1]}: ${name}${bowls[i].in ? "" : " (dead)"}`, 160, 160 + 20 * score);
+              ctx.fillText(`${["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"][score - 1]}: ${name}${bowls[i].in ? "" : " (dead)"}`, 480, 480 + 20 * score);
             }
 
             await delay(15000);
@@ -96,6 +95,7 @@ async function goToRoundMove(players){
       let og_y = bowls[id].y;
       let new_x;
       let new_y;
+          const maxSpeed = 300;
 
       function touchDown(event) {
         alert("touchstart" + JSON.stringify(event));
@@ -108,6 +108,7 @@ async function goToRoundMove(players){
             draw_line(og_x, og_y, move_x, move_y);
           }
 
+
           function touchUp(event) {
             new_x = getCoordsInCanvas(event.clientX, event.clientY).x;
             new_y = getCoordsInCanvas(event.clientX, event.clientY).y;
@@ -117,8 +118,8 @@ async function goToRoundMove(players){
 
             const { height, width } = canvas.getBoundingClientRect();
             const maxDraw = Math.sqrt(height * height + width * width);
-            vx = 200 / maxDraw * vx_unscaled;
-            vy = 200 / maxDraw * vy_unscaled;
+            vx = maxSpeed / maxDraw * vx_unscaled;
+            vy = maxSpeed / maxDraw * vy_unscaled;
 
             document.removeEventListener("touchend", touchUp, false);
             document.removeEventListener("touchmove", touchMove, false);
@@ -158,8 +159,8 @@ async function goToRoundMove(players){
 
             const { height, width } = canvas.getBoundingClientRect();
             const maxDraw = Math.sqrt(height * height + width * width);
-            vx = 200 / maxDraw * vx_unscaled;
-            vy = 200 / maxDraw * vy_unscaled;
+            vx = maxSpeed / maxDraw * vx_unscaled;
+            vy = maxSpeed / maxDraw * vy_unscaled;
 
             document.removeEventListener("mouseup", mouseUp);
             document.removeEventListener("mousemove", mouseMove);

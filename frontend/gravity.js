@@ -1,18 +1,17 @@
 import  { delay } from "./util";
 import { id } from "./main";
 
-const length = 400;
-const initial_radius = 150;
-export const radius = 10;
-const coeff = 40000;
-const centerco = 80000;
+const length = 1000;
+const initial_radius = 375;
+export const radius = 25;
+const coeff = 1200000;
+const centerco = 150000;
 const repulsion = 100;
-const interval = 0.01;
-const cycles = 500;
+const interval = 0.007;
+const cycles = 750;
 const time = 1;
 const canvas = document.getElementById("game");
 export const ctx = canvas.getContext("2d");
-    ctx.font = "16px Courier New";
 const half = length/2;
 export let images = [ "sun", "mercury", "earth", "moon", "mars", "jupiter", "neptune", "spacerock"];
 
@@ -44,6 +43,7 @@ export function draw_line(x1, y1, x2, y2) {
 }
 
 function draw(player) {
+    ctx.font = "20px Courier New";
     ctx.fillStyle = (player == id) ? "rgb(254, 206, 105)" : "white";
 
     const bowl = bowls[player];
