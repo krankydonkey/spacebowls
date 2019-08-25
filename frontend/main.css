@@ -79,6 +79,20 @@ input {
     white-space: nowrap;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding-bottom: 0.2rem;
+}
+
+.row img {
+    height: 100%;
+    width: 1rem;
+    padding-right: 0.5rem;
+    
+}
+
 #canvas-wrapper {
   grid-area: canvas;
     width: calc(80vh - 3rem);
