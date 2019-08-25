@@ -10,7 +10,7 @@ const interval = 0.01;
 const cycles = 1000;
 const time = 2;
 const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+export const ctx = canvas.getContext("2d");
     ctx.font = "16px Courier New";
 const half = length/2;
 
@@ -175,20 +175,21 @@ function gravity() {
     const bowlVDotDirection = direction_x * bowl.vx + direction_y * bowl.vy;
     const otherVDotDirection = direction_x * other.vx + direction_y * other.vy;
 
-    if (bowlVDotDirection > 0) {
-      bowl.vx -= bowlVDotDirection * direction_x;
-      bowl.vy -= bowlVDotDirection * direction_y;
-      other.vx += bowlVDotDirection * direction_x;
-      other.vy += bowlVDotDirection * direction_x;
-    }
 
-    if (otherVDotDirection < 0) {
-      other.vx -= otherVDotDirection * direction_x;
-      other.vy -= otherVDotDirection * direction_y;
-      bowl.vx += otherVDotDirection * direction_x;
-      bowl.vy += otherVDotDirection * direction_x;
-    }
-  });
+      if (bowlVDotDirection > 0) {
+        bowl.vx -= bowlVDotDirection * direction_x;
+        bowl.vy -= bowlVDotDirection * direction_y;
+        other.vx += bowlVDotDirection * direction_x;
+        other.vy += bowlVDotDirection * direction_y;
+      }
+
+      if (otherVDotDirection < 0) {
+        other.vx -= otherVDotDirection * direction_x;
+        other.vy -= otherVDotDirection * direction_y;
+        bowl.vx += otherVDotDirection * direction_x;
+        bowl.vy += otherVDotDirection * direction_y;
+      }
+    });
 }
 
 function iterate() {
