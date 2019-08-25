@@ -1,4 +1,4 @@
-import { draw_all, draw_line, clear_board, create_players, move, bowls, radius } from './gravity';
+import { ctx, draw_all, draw_line, clear_board, create_players, move, bowls, radius } from './gravity';
 import { delay } from "./util";
 
 const button = document.getElementById("login");
@@ -53,26 +53,39 @@ async function goToMain() {
             for (let i = 0; i < 3; ++i) {
               await goToRoundMove(list.players);
             }
-            
-            // show the winner
-            await delay(3000);
 
             let distances = [];
-            for (let i = 0; i < num; i++) {
+            let min = 100000;
+            for (let i = 0; i < list.players.length; i++) {
                 let player = list.players[i];
-                let bowl = bowls[player];
-                let x = bowl.x;
-                let y = bowl.y;
-                let midpoint_x = length / 2;
-                let midpoint_y = canvas.height / 2;
-                // finds the distance between the center point and the bowl using
-                // Pythagoras' Theorem
-                distances[i] = Math.sqrt(Math.pow(midpoint_y - y, 2)
-                    + Math.pow(midpoint_x - x, 2));
+                let bowl = bowls[i];
+                if (bowls.in) {
+                  let x = bowl.x;
+                  let y = bowl.y;
+                  let midpoint_x = length / 2;
+                  let midpoint_y = canvas.height / 2;
+                  // finds the distance between the center point and the bowl using
+                  // Pythagoras' Theorem
+                  distances[i] = Math.sqrt(Math.pow(midpoint_y - y, 2)
+                      + Math.pow(midpoint_x - x, 2));
+                  if (distances[i] < min) {
+                    min = distances[i];
+                  }
+                }
             }
 
-            let max = Math.max(...distances);
-            let winner = list.players[distances.findIndex(max)];
+            let winningIndex = distances.indexOf(min);
+            let winner = winningIndex === -1 ? "All players lost" : list.players[winningIndex];
+
+            await delay(2000);
+
+            // show the winner
+            ctx.fillStyle = "rgb(254, 206, 105)";
+            ctx.clearRect(0, 0, 400, 400);
+            ctx.fillText("Winner:", 160, 180);
+            ctx.fillText(winner, 160, 200);
+            
+            await delay(8000);
 
             await goToLogin();
 
