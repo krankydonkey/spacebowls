@@ -5,6 +5,7 @@ const length = 400;
 const initial_radius = 100;
 export const radius = 10;
 const coeff = 40000;
+const centerco = 10000;
 const repulsion = 100;
 const interval = 0.01;
 const cycles = 1000;
@@ -162,6 +163,15 @@ function gravity() {
       if (r < 2 * radius) {
         collisions.push([i, j]);
       }
+    }
+    // Centre gravity
+    let diff_x = half - bowl.x;
+    let diff_y = half - bowl.y;
+    let r2 = diff_x*diff_x + diff_y*diff_y;
+    let r = Math.sqrt(r2);
+    if (r > 2*radius) {
+      bowl.fx += centerco * diff_x / (r2*r);
+      bowl.fy += centerco * diff_y / (r2*r);
     }
   }
 
