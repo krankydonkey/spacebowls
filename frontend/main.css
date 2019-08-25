@@ -130,3 +130,7 @@ input {
     width: 100%;
     background: radial-gradient(black, transparent);
 }
+
+.instructions {
+    max-width: 80%
+}
