@@ -2,7 +2,7 @@ import  { delay } from "./util";
 import { id } from "./main";
 
 const length = 400;
-const initial_radius = 100;
+const initial_radius = 150;
 export const radius = 10;
 const coeff = 40000;
 const centerco = 80000;
@@ -190,19 +190,16 @@ function gravity() {
     const otherVDotDirection = direction_x * other.vx + direction_y * other.vy;
 
 
-      if (bowlVDotDirection > 0) {
-        bowl.vx -= bowlVDotDirection * direction_x;
-        bowl.vy -= bowlVDotDirection * direction_y;
-        other.vx += bowlVDotDirection * direction_x;
-        other.vy += bowlVDotDirection * direction_y;
-      }
+      
+    bowl.vx -= bowlVDotDirection * direction_x;
+    bowl.vy -= bowlVDotDirection * direction_y;
+    other.vx += bowlVDotDirection * direction_x;
+    other.vy += bowlVDotDirection * direction_y;
 
-      if (otherVDotDirection < 0) {
-        other.vx -= otherVDotDirection * direction_x;
-        other.vy -= otherVDotDirection * direction_y;
-        bowl.vx += otherVDotDirection * direction_x;
-        bowl.vy += otherVDotDirection * direction_y;
-      }
+    other.vx -= otherVDotDirection * direction_x;
+    other.vy -= otherVDotDirection * direction_y;
+    bowl.vx += otherVDotDirection * direction_x;
+    bowl.vy += otherVDotDirection * direction_y;
     });
 }
 
@@ -257,7 +254,7 @@ export async function rank() {
     sorted.push({player, d2});
   }
   sorted.sort(function(a, b) {
-    return b.d2 - a.d2;
+    return a.d2 - b.d2;
   });
   console.log(sorted)
   for (let i = 0; i < num; i++) {
