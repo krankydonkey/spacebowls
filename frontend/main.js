@@ -65,10 +65,10 @@ async function goToMain() {
             for (let i = 0; i < 8; ++i) {
               const name = list.players[i];
               const score = scores[i];
-              ctx.fillText(`${["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "last"][score]}: ${name}`, 160, 180 + 20 * i);
+              ctx.fillText(`${["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"][score - 1]}: ${name}${bowls[i].in ? "" : " (dead)"}`, 160, 160 + 20 * score);
             }
 
-            await delay(8000);
+            await delay(15000);
 
             await goToLogin();
 
